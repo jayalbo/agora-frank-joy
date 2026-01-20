@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agora God: Frank Edition</title>
+    <title>Frank: The Agoura Architect</title>
     <style>
         :root {
             --primary: #00a3ff;
             --bg: #050505;
-            --surface: rgba(20, 20, 30, 0.9);
+            --surface: rgba(15, 15, 25, 0.9);
             --text: #ffffff;
             --agora-blue: #099dfd;
+            --accent: #22c55e;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -25,262 +26,368 @@
             min-height: 100vh;
             overflow: hidden;
             perspective: 2000px;
+            transition: background 1s ease;
         }
 
-        #matrix-bg {
+        #canvas-bg {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: 0;
-            opacity: 0.3;
         }
 
-        .frank-visionary {
+        .frank-presence {
             position: fixed;
-            width: 350px;
-            height: 350px;
-            background: url('https://picsum.photos/id/1005/400/400') center/cover;
+            width: 400px;
+            height: 400px;
+            background: url('https://picsum.photos/id/1005/500/500') center/cover;
             border-radius: 50%;
-            filter: grayscale(1) brightness(1.5) drop-shadow(0 0 40px var(--agora-blue));
-            opacity: 0.15;
+            filter: grayscale(1) brightness(0.8) contrast(1.2);
+            opacity: 0.1;
             z-index: 1;
             pointer-events: none;
-            animation: pulse 4s ease-in-out infinite;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
             border: 2px solid var(--agora-blue);
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.1; }
-            50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.3; }
+            transition: all 0.5s ease;
         }
 
         .app-card {
-            width: 90%;
-            max-width: 480px;
+            width: 92%;
+            max-width: 500px;
             background: var(--surface);
-            backdrop-filter: blur(40px);
-            padding: 40px;
-            border-radius: 30px;
+            backdrop-filter: blur(50px);
+            padding: 30px;
+            border-radius: 32px;
             text-align: center;
-            box-shadow: 0 0 60px rgba(0, 163, 255, 0.2);
-            border: 1px solid rgba(0, 163, 255, 0.3);
+            box-shadow: 0 0 80px rgba(0, 163, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             z-index: 10;
             position: relative;
             transform-style: preserve-3d;
+            transition: transform 0.1s, border 0.3s;
         }
 
-        .latency-indicator {
-            position: absolute;
-            top: 20px;
-            right: 30px;
-            font-size: 0.7rem;
-            color: #22c55e;
-            font-weight: bold;
+        .header {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 5px;
+            margin-bottom: 20px;
         }
 
-        .latency-dot {
-            width: 8px;
-            height: 8px;
-            background: #22c55e;
-            border-radius: 50%;
-            animation: blink 1s infinite;
+        .level-badge {
+            background: var(--agora-blue);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 900;
         }
-
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
         h1 {
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             font-weight: 900;
-            margin-bottom: 5px;
             background: linear-gradient(135deg, #fff, var(--agora-blue));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            margin-bottom: 5px;
         }
 
-        .tagline {
-            color: #64748b;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 30px;
+        .power-up-bar {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            justify-content: center;
         }
 
-        .btn-core {
+        .skill-node {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            opacity: 0.3;
+            transition: 0.3s;
+            border: 1px solid transparent;
+        }
+
+        .skill-node.unlocked {
+            opacity: 1;
+            background: rgba(9, 157, 253, 0.2);
+            border-color: var(--agora-blue);
+            box-shadow: 0 0 10px var(--agora-blue);
+        }
+
+        .btn-sync {
             background: linear-gradient(135deg, #099dfd, #0055ff);
             color: white;
             border: none;
-            padding: 25px;
-            font-size: 1.8rem;
+            padding: 24px;
+            font-size: 1.6rem;
             font-weight: 900;
             border-radius: 20px;
             cursor: pointer;
             width: 100%;
-            transition: 0.1s;
+            margin: 15px 0;
+            transition: transform 0.1s, box-shadow 0.2s;
             box-shadow: 0 10px 30px rgba(9, 157, 253, 0.4);
-            margin: 20px 0;
         }
 
-        .btn-core:active { transform: scale(0.95) translateZ(-10px); }
+        .btn-sync:active { transform: scale(0.96) translateZ(-10px); }
+
+        .progress-container {
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.7rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            color: var(--agora-blue);
+        }
 
         .progress-track {
             height: 10px;
             background: rgba(255,255,255,0.05);
             border-radius: 5px;
             overflow: hidden;
-            margin: 15px 0;
         }
 
         .progress-fill {
             height: 100%;
             width: 0%;
             background: var(--agora-blue);
-            box-shadow: 0 0 15px var(--agora-blue);
+            box-shadow: 0 0 20px var(--agora-blue);
             transition: width 0.1s;
         }
 
-        .frank-stats {
+        .stats {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
-            margin-top: 20px;
         }
 
-        .stat-node {
+        .stat-card {
             background: rgba(0,0,0,0.3);
             padding: 15px;
             border-radius: 15px;
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.05);
         }
 
-        .stat-node label { font-size: 0.6rem; color: #64748b; text-transform: uppercase; display: block; }
-        .stat-node span { font-size: 1.2rem; font-weight: 800; }
+        .stat-card label { font-size: 0.6rem; color: #64748b; text-transform: uppercase; display: block; }
+        .stat-card span { font-size: 1.2rem; font-weight: 800; }
 
-        .floating-icon {
+        .unlock-toast {
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent);
+            color: black;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 900;
+            font-size: 0.8rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.5s;
+        }
+
+        .floating-data {
             position: fixed;
             pointer-events: none;
-            color: var(--agora-blue);
-            font-size: 1.5rem;
             font-weight: 900;
-            animation: rise 1s forwards;
+            animation: dataRise 1.2s forwards;
             z-index: 100;
         }
 
-        @keyframes rise {
+        @keyframes dataRise {
             0% { transform: translateY(0) scale(1); opacity: 1; }
-            100% { transform: translateY(-200px) scale(2); opacity: 0; }
+            100% { transform: translateY(-250px) scale(2); opacity: 0; }
+        }
+
+        .shake { animation: shake 0.2s; }
+        @keyframes shake {
+            0%, 100% { transform: none; }
+            25% { transform: translate(-4px, 4px) rotate(-1deg); }
+            75% { transform: translate(4px, -4px) rotate(1deg); }
         }
     </style>
 </head>
 <body>
-    <canvas id="matrix-bg"></canvas>
-    <div class="frank-visionary" style="top: 50%; left: 50%;"></div>
+    <canvas id="canvas-bg"></canvas>
+    <div class="frank-presence" id="frank"></div>
 
-    <div class="app-card" id="main">
-        <div class="latency-indicator">
-            <div class="latency-dot"></div>
-            <span>LOW LATENCY JOY</span>
+    <div class="app-card" id="card">
+        <div class="unlock-toast" id="toast">NEW UNLOCK: HYPER SYNC!</div>
+        
+        <div class="header">
+            <span class="level-badge" id="levelBadge">LVL 1</span>
+            <div style="font-size: 0.7rem; color: var(--accent); font-weight: 900;">• LOW LATENCY LIVE</div>
         </div>
 
-        <h1 id="title">FRANK ARCH</h1>
-        <p class="tagline">The Real-Time Architect</p>
+        <h1 id="rank">INITIATE</h1>
+        <p style="color: #64748b; font-size: 0.75rem; letter-spacing: 2px; margin-bottom: 15px;">AGOURA ARCHITECTURE</p>
 
-        <div style="margin-top: 20px; text-align: left;">
-            <div style="display: flex; justify-content: space-between; font-size: 0.7rem; font-weight: 900; color: var(--agora-blue);">
-                <span>SYNCING ENERGY...</span>
-                <span id="pCount">0 / 12</span>
+        <div class="power-up-bar">
+            <div class="skill-node" id="s1" title="Turbo Sync">⚡</div>
+            <div class="skill-node" id="s2" title="Void Access">🌑</div>
+            <div class="skill-node" id="s3" title="Frank's Aura">🌟</div>
+            <div class="skill-node" id="s4" title="Absolute Joy">💎</div>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-info">
+                <span>PACKET DENSITY</span>
+                <span id="pProgress">0 / 15</span>
             </div>
             <div class="progress-track">
                 <div class="progress-fill" id="fill"></div>
             </div>
         </div>
 
-        <button class="btn-core" onclick="pulse()">SYNC JOY</button>
+        <button class="btn-sync" onclick="sync()">SYNC REALITY</button>
 
-        <div class="frank-stats">
-            <div class="stat-node">
-                <label>Vibe Level</label>
-                <span id="lvl">1</span>
+        <div class="stats">
+            <div class="stat-card">
+                <label>Vibe Multiplier</label>
+                <span id="multi">1.0x</span>
             </div>
-            <div class="stat-node">
-                <label>Packet Score</label>
+            <div class="stat-card">
+                <label>Total Joy</label>
                 <span id="score">0</span>
             </div>
         </div>
     </div>
 
     <script>
-        const canvas = document.getElementById('matrix-bg');
+        const canvas = document.getElementById('canvas-bg');
         const ctx = canvas.getContext('2d');
         const fill = document.getElementById('fill');
-        const lvlEl = document.getElementById('lvl');
+        const pProgress = document.getElementById('pProgress');
+        const multiEl = document.getElementById('multi');
         const scoreEl = document.getElementById('score');
-        const pCount = document.getElementById('pCount');
-        const main = document.getElementById('main');
+        const levelBadge = document.getElementById('levelBadge');
+        const rankEl = document.getElementById('rank');
+        const card = document.getElementById('card');
+        const frank = document.getElementById('frank');
+        const toast = document.getElementById('toast');
 
         let level = 1;
         let score = 0;
         let clicks = 0;
+        let combo = 0;
+        let lastTime = Date.now();
+        let multiplier = 1.0;
 
-        function getReq() { return Math.ceil(10 * Math.pow(level, 1.4)); }
+        const ranks = ["INITIATE", "PRACTITIONER", "ARCHITECT", "ORACLE", "TRANSCENDENT", "FRANK-TIER"];
+        const unlocks = [
+            { lvl: 3, id: 's1', msg: 'TURBO SYNC UNLOCKED!' },
+            { lvl: 7, id: 's2', msg: 'VOID ACCESS GRANTED!' },
+            { lvl: 12, id: 's3', msg: "FRANK'S AURA ACTIVE!" },
+            { lvl: 20, id: 's4', msg: 'ABSOLUTE JOY ACHIEVED!' }
+        ];
 
-        function resize() {
+        function getReq() { return Math.ceil(15 * Math.pow(level, 1.45)); }
+
+        function sync() {
+            const now = Date.now();
+            if (now - lastTime < 300) combo++;
+            else combo = 0;
+            lastTime = now;
+
+            multiplier = 1.0 + (combo * 0.1) + (level * 0.2);
+            score += Math.floor(multiplier);
+            clicks++;
+
+            const req = getReq();
+            if (clicks >= req) levelUp();
+
+            updateUI();
+            spawnData();
+
+            card.classList.remove('shake');
+            void card.offsetWidth;
+            card.classList.add('shake');
+
+            frank.style.opacity = Math.min(0.6, 0.1 + (level * 0.05));
+            frank.style.transform = `translate(-50%, -50%) scale(${1 + (combo*0.02)}) rotate(${combo}deg)`;
+        }
+
+        function levelUp() {
+            level++;
+            clicks = 0;
+            rankEl.innerText = ranks[Math.min(ranks.length - 1, Math.floor(level / 4))];
+            
+            const unlock = unlocks.find(u => u.lvl === level);
+            if (unlock) {
+                document.getElementById(unlock.id).classList.add('unlocked');
+                toast.innerText = unlock.msg;
+                toast.style.top = '20px';
+                toast.style.opacity = '1';
+                setTimeout(() => {
+                    toast.style.top = '-50px';
+                    toast.style.opacity = '0';
+                }, 3000);
+            }
+
+            if (level === 7) {
+                document.body.style.background = 'radial-gradient(circle, #0a0a1a 0%, #000 100%)';
+            }
+            if (level === 15) {
+                document.body.style.background = 'radial-gradient(circle, #1a0a1a 0%, #000 100%)';
+            }
+        }
+
+        function updateUI() {
+            const req = getReq();
+            fill.style.width = (clicks / req * 100) + '%';
+            pProgress.innerText = `${clicks} / ${req}`;
+            scoreEl.innerText = score.toLocaleString();
+            multiEl.innerText = multiplier.toFixed(1) + 'x';
+            levelBadge.innerText = `LVL ${level}`;
+        }
+
+        function spawnData() {
+            const el = document.createElement('div');
+            el.className = 'floating-data';
+            el.innerText = '+' + Math.floor(multiplier);
+            el.style.left = (Math.random() * 60 + 20) + 'vw';
+            el.style.top = '60vh';
+            el.style.color = multiplier > 5 ? 'var(--accent)' : 'var(--agora-blue)';
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 1200);
+        }
+
+        function draw() {
+            ctx.fillStyle = 'rgba(5, 5, 5, 0.2)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = level > 10 ? 'rgba(255, 255, 255, 0.1)' : 'rgba(9, 157, 253, 0.1)';
+            
+            const count = level * 2 + 10;
+            for(let i=0; i<count; i++) {
+                const x = (Math.sin(Date.now()*0.001 + i) * 0.5 + 0.5) * canvas.width;
+                const y = (Math.cos(Date.now()*0.0012 + i*2) * 0.5 + 0.5) * canvas.height;
+                ctx.beginPath();
+                ctx.arc(x, y, level > 10 ? 2 : 1, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            requestAnimationFrame(draw);
+        }
+
+        window.addEventListener('resize', () => {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resize);
-        resize();
+        });
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
 
-        function pulse() {
-            score++;
-            clicks++;
-            const req = getReq();
-
-            if (clicks >= req) {
-                level++;
-                clicks = 0;
-                main.style.borderColor = '#22c55e';
-                setTimeout(() => main.style.borderColor = 'rgba(0, 163, 255, 0.3)', 300);
-            }
-
-            update();
-            spawn();
-        }
-
-        function update() {
-            const req = getReq();
-            fill.style.width = (clicks/req*100) + '%';
-            pCount.innerText = `${clicks} / ${req}`;
-            lvlEl.innerText = level;
-            scoreEl.innerText = score;
-        }
-
-        function spawn() {
-            const el = document.createElement('div');
-            el.className = 'floating-icon';
-            el.innerText = Math.random() > 0.5 ? 'AGORA' : 'FRANK';
-            el.style.left = (Math.random()*60 + 20) + 'vw';
-            el.style.top = '60vh';
-            document.body.appendChild(el);
-            setTimeout(() => el.remove(), 1000);
-        }
-
-        function drawMatrix() {
-            ctx.fillStyle = 'rgba(5, 5, 5, 0.1)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#099dfd';
-            ctx.font = '10px monospace';
-            for(let i=0; i<50; i++) {
-                const x = Math.random() * canvas.width;
-                const y = Math.random() * canvas.height;
-                ctx.fillText(Math.random().toString(2).substr(2, 8), x, y);
-            }
-            requestAnimationFrame(drawMatrix);
-        }
-
-        update();
-        drawMatrix();
+        updateUI();
+        draw();
     </script>
 </body>
 </html>
