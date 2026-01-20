@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agora God: Frank Edition</title>
+    <style>
+        :root {
+            --primary: #00a3ff;
+            --bg: #050505;
+            --surface: rgba(20, 20, 30, 0.9);
+            --text: #ffffff;
+            --agora-blue: #099dfd;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            perspective: 2000px;
+        }
+
+        #matrix-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 0;
+            opacity: 0.3;
+        }
+
+        .frank-visionary {
+            position: fixed;
+            width: 350px;
+            height: 350px;
+            background: url('https://picsum.photos/id/1005/400/400') center/cover;
+            border-radius: 50%;
+            filter: grayscale(1) brightness(1.5) drop-shadow(0 0 40px var(--agora-blue));
+            opacity: 0.15;
+            z-index: 1;
+            pointer-events: none;
+            animation: pulse 4s ease-in-out infinite;
+            border: 2px solid var(--agora-blue);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.1; }
+            50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.3; }
+        }
+
+        .app-card {
+            width: 90%;
+            max-width: 480px;
+            background: var(--surface);
+            backdrop-filter: blur(40px);
+            padding: 40px;
+            border-radius: 30px;
+            text-align: center;
+            box-shadow: 0 0 60px rgba(0, 163, 255, 0.2);
+            border: 1px solid rgba(0, 163, 255, 0.3);
+            z-index: 10;
+            position: relative;
+            transform-style: preserve-3d;
+        }
+
+        .latency-indicator {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 0.7rem;
+            color: #22c55e;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .latency-dot {
+            width: 8px;
+            height: 8px;
+            background: #22c55e;
+            border-radius: 50%;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 5px;
+            background: linear-gradient(135deg, #fff, var(--agora-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .tagline {
+            color: #64748b;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+        }
+
+        .btn-core {
+            background: linear-gradient(135deg, #099dfd, #0055ff);
+            color: white;
+            border: none;
+            padding: 25px;
+            font-size: 1.8rem;
+            font-weight: 900;
+            border-radius: 20px;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.1s;
+            box-shadow: 0 10px 30px rgba(9, 157, 253, 0.4);
+            margin: 20px 0;
+        }
+
+        .btn-core:active { transform: scale(0.95) translateZ(-10px); }
+
+        .progress-track {
+            height: 10px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--agora-blue);
+            box-shadow: 0 0 15px var(--agora-blue);
+            transition: width 0.1s;
+        }
+
+        .frank-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-node {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .stat-node label { font-size: 0.6rem; color: #64748b; text-transform: uppercase; display: block; }
+        .stat-node span { font-size: 1.2rem; font-weight: 800; }
+
+        .floating-icon {
+            position: fixed;
+            pointer-events: none;
+            color: var(--agora-blue);
+            font-size: 1.5rem;
+            font-weight: 900;
+            animation: rise 1s forwards;
+            z-index: 100;
+        }
+
+        @keyframes rise {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-200px) scale(2); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="matrix-bg"></canvas>
+    <div class="frank-visionary" style="top: 50%; left: 50%;"></div>
+
+    <div class="app-card" id="main">
+        <div class="latency-indicator">
+            <div class="latency-dot"></div>
+            <span>LOW LATENCY JOY</span>
+        </div>
+
+        <h1 id="title">FRANK ARCH</h1>
+        <p class="tagline">The Real-Time Architect</p>
+
+        <div style="margin-top: 20px; text-align: left;">
+            <div style="display: flex; justify-content: space-between; font-size: 0.7rem; font-weight: 900; color: var(--agora-blue);">
+                <span>SYNCING ENERGY...</span>
+                <span id="pCount">0 / 12</span>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill" id="fill"></div>
+            </div>
+        </div>
+
+        <button class="btn-core" onclick="pulse()">SYNC JOY</button>
+
+        <div class="frank-stats">
+            <div class="stat-node">
+                <label>Vibe Level</label>
+                <span id="lvl">1</span>
+            </div>
+            <div class="stat-node">
+                <label>Packet Score</label>
+                <span id="score">0</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('matrix-bg');
+        const ctx = canvas.getContext('2d');
+        const fill = document.getElementById('fill');
+        const lvlEl = document.getElementById('lvl');
+        const scoreEl = document.getElementById('score');
+        const pCount = document.getElementById('pCount');
+        const main = document.getElementById('main');
+
+        let level = 1;
+        let score = 0;
+        let clicks = 0;
+
+        function getReq() { return Math.ceil(10 * Math.pow(level, 1.4)); }
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        function pulse() {
+            score++;
+            clicks++;
+            const req = getReq();
+
+            if (clicks >= req) {
+                level++;
+                clicks = 0;
+                main.style.borderColor = '#22c55e';
+                setTimeout(() => main.style.borderColor = 'rgba(0, 163, 255, 0.3)', 300);
+            }
+
+            update();
+            spawn();
+        }
+
+        function update() {
+            const req = getReq();
+            fill.style.width = (clicks/req*100) + '%';
+            pCount.innerText = `${clicks} / ${req}`;
+            lvlEl.innerText = level;
+            scoreEl.innerText = score;
+        }
+
+        function spawn() {
+            const el = document.createElement('div');
+            el.className = 'floating-icon';
+            el.innerText = Math.random() > 0.5 ? 'AGORA' : 'FRANK';
+            el.style.left = (Math.random()*60 + 20) + 'vw';
+            el.style.top = '60vh';
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 1000);
+        }
+
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(5, 5, 5, 0.1)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#099dfd';
+            ctx.font = '10px monospace';
+            for(let i=0; i<50; i++) {
+                const x = Math.random() * canvas.width;
+                const y = Math.random() * canvas.height;
+                ctx.fillText(Math.random().toString(2).substr(2, 8), x, y);
+            }
+            requestAnimationFrame(drawMatrix);
+        }
+
+        update();
+        drawMatrix();
+    </script>
+</body>
+</html>
